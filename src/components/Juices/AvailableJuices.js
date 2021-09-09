@@ -1,4 +1,6 @@
-import styles from './AvailableJuices.module.css'
+import styles from './AvailableJuices.module.css';
+import Card from '../UI/Card';
+import JuiceItem from './JuiceItem/JuiceItem'
 const Mock_Juices = [
     {
       id: 'j1',
@@ -27,11 +29,13 @@ const Mock_Juices = [
   ];
 
   const AvailableJuices = () => {
-      const juiceList = Mock_Juices.map(meal=> <li>{meal.name}</li>)
+      const juiceList = Mock_Juices.map(juice => <JuiceItem key={juice.id} name={juice.name} description={juice.description} price={juice.price}></JuiceItem>)
       return <section className={styles.juices}>
-          <ul>
-              {juiceList}
-          </ul>
+          <Card>
+            <ul>
+                {juiceList}
+            </ul>
+          </Card>
       </section>
   }
 
