@@ -1,7 +1,17 @@
 import styles from './JuiceItem.module.css'
-import React from 'react';
-import JuiceItemForm from './JuiceItemForm'
+import React, {useContext} from 'react';
+import JuiceItemForm from './JuiceItemForm';
+import CartContext from '../../../store/cart-context';
 const JuiceItem = (props) => {
+    const cartCtx = useContext(CartContext)
+    const addToCartHandler = amount => {
+        cartCtx.addItem({
+            id:props.id,
+            name:props.name,
+            amount: amount,
+            price: props.price
+        })
+    }
     const price = `$${props.price.toFixed(2)}`
 return <li className={styles.juice}>
     <div>
@@ -10,7 +20,7 @@ return <li className={styles.juice}>
         <div className={styles.price}>{price}</div>
     </div>
     <div>
-        <JuiceItemForm />
+        <JuiceItemForm onAddToCart={addToCartHandler} />
     </div>
 </li>
 }

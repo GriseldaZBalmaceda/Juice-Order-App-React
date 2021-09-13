@@ -5,7 +5,49 @@
     max-height: 20rem;
     overflow: auto;
   }
-  
+  .juiceItem{
+    display:flex;
+    align-items: center;
+  }
+  .juiceItem h3 {
+    margin: 0;
+
+  }
+  .juiceImage{
+    flex:2;
+    text-align: center;
+    padding: 20px;
+  }
+  .juiceImage img{
+    height: 70px;
+  }
+  .juiceName{
+    flex:auto;
+  }
+  .juiceName h3{
+    margin: 0;
+  }
+  .milli {
+    font-size: 10px;
+    margin: 0px;
+  }
+  .actionButtons{
+    flex:auto;
+    text-align: center;
+  }
+  .add{
+    margin-right: 5px;
+    color:#00BD56
+  }
+  .remove{
+    margin-left: 5px;
+    color:#FF2626
+  }
+  .juicePrice{
+    flex:auto;
+    text-align: right;
+    font-weight: bold;
+  }
   .total {
     display: flex;
     justify-content: space-between;
@@ -23,24 +65,22 @@
     font: inherit;
     cursor: pointer;
     background-color: transparent;
-    border: 1px solid #8a2b06;
+    border: 1px solid #00BD56;
     padding: 0.5rem 2rem;
-    border-radius: 25px;
     margin-left: 1rem;
   }
   
-  .actions button:hover,
+  .actions .button--myAlt:hover,
   .actions button:active {
-    background-color: #5a1a01;
-    border-color: #5a1a01;
+    background-color: #FF2626;
     color: white;
   }
   
-  .actions .button--alt {
-    color: #8a2b06;
+  .actions .button--myAlt {
+    color: #00BD56;
   }
   
   .actions .button {
-    background-color: #8a2b06;
+    background-color: #00BD56;
     color: white;
   }
