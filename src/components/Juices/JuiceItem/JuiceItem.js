@@ -9,7 +9,8 @@ const JuiceItem = (props) => {
             id:props.id,
             name:props.name,
             amount: amount,
-            price: props.price
+            price: props.price,
+            image: props.image
         })
     }
     const price = `$${props.price.toFixed(2)}`

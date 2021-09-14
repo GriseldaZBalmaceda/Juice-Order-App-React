@@ -8,33 +8,45 @@ const Mock_Juices = [
       description: 'Fresh Blueberries with rasperry.',
       price: 7.5,
       amount: 0,
-      image: '../assets/BlueJuice.jpg'
+      image: 'Images/BlueJuice.jpg'
     },
     {
       id: 'j2',
       name: 'SweetTart',
       description: 'Fresh Strawberries with lime.',
-      price: 8.00,
-      amount: 0
+      price: 8.5,
+      amount: 0,
+      image: 'Images/RedJuice.jpg'
     },
     {
       id: 'j3',
       name: 'EnvyGreen',
       description: 'Our specialty green juice.Broccoli, spinach, green apples.',
-      price: 9.00,
-      amount:0
+      price: 9.50,
+      amount:0,
+      image: 'Images/GreenJuice.jpg'
     },
     {
       id: 'j4',
-      name: 'GoodMorning',
-      description: 'An orange explosion.',
-      price: 7.00,
-      amount: 0
+      name: 'MorningSun',
+      description: 'A pineapple explosion.',
+      price: 7.50,
+      amount: 0,
+      image: 'Images/YellowJuice.jpg'
     },
   ];
 
   const AvailableJuices = () => {
-      const juiceList = Mock_Juices.map(juice => <JuiceItem key={juice.id} id={juice.id} name={juice.name} description={juice.description} price={juice.price} amount={juice.amount}></JuiceItem>)
+      const juiceList = Mock_Juices.map(juice => 
+        <JuiceItem 
+          key={juice.id} 
+          id={juice.id} 
+          name={juice.name} 
+          description={juice.description} 
+          price={juice.price} 
+          amount={juice.amount} 
+          image={juice.image}>
+        </JuiceItem>)
       return <section className={styles.juices}>
           <Card>
             <ul>

@@ -3,22 +3,42 @@ import Modal from '../UI/Modal'
 import React, {useContext} from 'react'
 import CartContext from '../../store/cart-context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import BlueJuice from '../../assets/BlueJuice.jpg'
+// import BlueJuice from '../../assets/BlueJuice.jpg'
 
 const Cart = props => {
-const cartCtx = useContext(CartContext)
-const juiceItems = (
-<ul className={styles['juice-items']}>
-    <div className={styles.juiceItem}>
-        <div className={styles.juiceImage}><img alt="blue juice" src={BlueJuice}/></div>
-        <div className={styles.juiceName}>
-            <h3>Berry Blast</h3>
-            <p className={styles.milli}>250ml</p>
+const cartCtx = useContext(CartContext);
+const addItem = (item) => {
+    cartCtx.addItem({
+        id:item.id,
+        name:item.name,
+        amount: 1,
+        price: item.price,
+        image: item.image
+    })
+}
+const removeItem = (item) => {
+    cartCtx.removeItem({
+        id:item.id,
+        amount: 1,
+    })
+}
+const JuiceCartItem = (item) =>  (
+    <ul className={styles['juice-items']}>
+        <div className={styles.juiceItem}>
+            <div className={styles.juiceImage}><img alt="blue juice" src={item.image}/></div>
+            <div className={styles.juiceName}>
+                <h3>{item.name}</h3>
+                <p className={styles.milli}>250ml</p>
+            </div>
+            <div className={styles.actionButtons}>
+                <FontAwesomeIcon className={styles.add} icon="plus-circle" onClick={()=>addItem(item)} /> 
+                    {item.amount} 
+                <FontAwesomeIcon className={styles.remove} icon="minus-circle" onClick={()=>removeItem(item)} /></div>
+            <div className={styles.juicePrice}>{item.price}</div>
         </div>
-        <div className={styles.actionButtons}><FontAwesomeIcon className={styles.add} icon="plus-circle" /> 3 <FontAwesomeIcon className={styles.remove} icon="minus-circle" /></div>
-        <div className={styles.juicePrice}>7.50</div>
-    </div>
-    {cartCtx.items.map((item)=> (<li key={item.id}>{item.name} {item.amount}</li>))}</ul>);
+    </ul>
+    )
+const juiceItems = cartCtx.items.map((item)=> (JuiceCartItem(item)));
 return(
     <Modal closeModal={props.onHideCartModal}>
         {juiceItems}
