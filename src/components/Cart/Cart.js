@@ -1,11 +1,15 @@
 import styles from './Cart.module.css'
 import Modal from '../UI/Modal'
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import CartContext from '../../store/cart-context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Checkout from './Checkout'
 // import BlueJuice from '../../assets/BlueJuice.jpg'
 
 const Cart = props => {
+const [isCheckout, setIsCheckout] = useState(false);
+const [isSubmitting, setIsSubmitting] = useState(false);
+const [didSubmit, setDidSubmit] = useState(false)
 const cartCtx = useContext(CartContext);
 const addItem = (item) => {
     cartCtx.addItem({
@@ -21,6 +25,24 @@ const removeItem = (item) => {
         id:item.id,
         amount: 1,
     })
+}
+const orderHandler =()=>{
+    setIsCheckout(true)
+}
+const submitOrderHandler = async (userData) => {
+    setIsSubmitting(true)
+    await fetch('https://mainsqueeze-fc349-default-rtdb.firebaseio.com/orders.json',{
+        method:'POST',
+        body: JSON.stringify({
+            user: userData,
+            orderedItems:cartCtx.juiceItems
+        })
+    });
+    setIsSubmitting(false);
+    setDidSubmit(true);
+    cartCtx.clearCart()
+
+    
 }
 const JuiceCartItem = (item) =>  (
     <ul className={styles['juice-items']}>
@@ -39,17 +61,29 @@ const JuiceCartItem = (item) =>  (
     </ul>
     )
 const juiceItems = cartCtx.items.map((item)=> (JuiceCartItem(item)));
+const modalActions = isCheckout ?  <Checkout onOrder={submitOrderHandler} onCancel={props.onHideCartModal} /> : <div className={styles.actions}>
+    <button className={styles['button--myAlt']} onClick={props.onHideCartModal}>Close</button>
+    <button className={styles.button} onClick={orderHandler}>Order</button>
+</div>
+const cartModalContent = <React.Fragment>
+                            <div className={styles.juicesContainers}>
+                                {juiceItems}
+                                <div className={styles.total}>
+                                    <span>Total Amount</span>
+                                    <span>{cartCtx.totalAmount}</span>
+                                </div>
+                                {modalActions}
+                            </div>
+                        </React.Fragment>
+const isSubmittingModalContent = <p>Sending order data...</p>
+const didSubmitModalContent = <React.Fragment>
+                                <p>Order was sent!</p>
+                            </React.Fragment>
 return(
     <Modal closeModal={props.onHideCartModal}>
-        {juiceItems}
-        <div className={styles.total}>
-            <span>Total Amount</span>
-            <span>{cartCtx.totalAmount}</span>
-        </div>
-        <div className={styles.actions}>
-            <button className={styles['button--myAlt']} onClick={props.onHideCartModal}>Close</button>
-            <button className={styles.button}>Order</button>
-        </div>
+        {!isSubmitting && !didSubmit && cartModalContent} 
+        {isSubmitting && isSubmittingModalContent}  
+        {!isSubmitting && didSubmit && didSubmitModalContent}
     </Modal>
 )
 }

@@ -1,43 +1,47 @@
 import styles from './AvailableJuices.module.css';
 import Card from '../UI/Card';
 import JuiceItem from './JuiceItem/JuiceItem'
-const Mock_Juices = [
-    {
-      id: 'j1',
-      name: 'Berry Blast',
-      description: 'Fresh Blueberries with rasperry.',
-      price: 7.5,
-      amount: 0,
-      image: 'Images/BlueJuice.jpg'
-    },
-    {
-      id: 'j2',
-      name: 'SweetTart',
-      description: 'Fresh Strawberries with lime.',
-      price: 8.5,
-      amount: 0,
-      image: 'Images/RedJuice.jpg'
-    },
-    {
-      id: 'j3',
-      name: 'EnvyGreen',
-      description: 'Our specialty green juice.Broccoli, spinach, green apples.',
-      price: 9.50,
-      amount:0,
-      image: 'Images/GreenJuice.jpg'
-    },
-    {
-      id: 'j4',
-      name: 'MorningSun',
-      description: 'A pineapple explosion.',
-      price: 7.50,
-      amount: 0,
-      image: 'Images/YellowJuice.jpg'
-    },
-  ];
+import { useEffect, useState } from 'react';
 
   const AvailableJuices = () => {
-      const juiceList = Mock_Juices.map(juice => 
+    const [availableJuices, setJuices] = useState([])
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState()
+
+    useEffect(()=>{
+        const fetchJuices = async () => {
+          const response =  await fetch('https://mainsqueeze-fc349-default-rtdb.firebaseio.com/juices.json');
+        
+          if(!response.ok) {
+            throw new Error('Something went wrong!')
+          }
+          const responseData = await response.json();
+          const loadedJuices = [];
+            
+          for(const key in responseData) {
+            loadedJuices.push({
+              id:key,
+              name:responseData[key].name,
+              description:responseData[key].description,
+              price: responseData[key].price,
+              image: responseData[key].image
+            })
+          };
+          setJuices(loadedJuices)
+          setLoading(false)
+        }
+      fetchJuices().catch((error)=>{
+        setLoading(false);
+        setError(error.message);  
+      });
+  },[])
+  if(error) {
+    return <section>There is an error</section>
+  }
+  if(loading) {
+    return <section className={styles.loading}>Loading</section>
+  }
+  const juiceList = availableJuices.map(juice => 
         <JuiceItem 
           key={juice.id} 
           id={juice.id} 
@@ -47,13 +51,14 @@ const Mock_Juices = [
           amount={juice.amount} 
           image={juice.image}>
         </JuiceItem>)
-      return <section className={styles.juices}>
+      return (loading ? <section className={styles.loading}> Loading </section>:
+      <section className={styles.juices}>
           <Card>
             <ul>
                 {juiceList}
             </ul>
           </Card>
-      </section>
+      </section>)
   }
 
   export default AvailableJuices
