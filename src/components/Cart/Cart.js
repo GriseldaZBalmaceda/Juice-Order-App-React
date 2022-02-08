@@ -5,6 +5,7 @@ import CartContext from '../../store/cart-context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Checkout from './Checkout'
 // import BlueJuice from '../../assets/BlueJuice.jpg'
+//testing
 
 const Cart = props => {
 const [isCheckout, setIsCheckout] = useState(false);
